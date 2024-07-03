@@ -1,0 +1,8 @@
+
+.primary {
+ @apply   px-5 py-3 bg-main-color-500 text-white text-sm h-12  rounded-md hover:bg-main-color-50 hover:text-main-color-500  hover:border hover:border-main-color-500;
+}
+
+.secondary {
+    @apply px-5 py-3 border-main-color-500 text-main-color-500  h-12  rounded-md border flex items-center justify-center;
+}

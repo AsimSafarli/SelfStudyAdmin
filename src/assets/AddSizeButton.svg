@@ -1,0 +1,15 @@
+<svg width="38.000000" height="38.000000" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<desc>
+			Created with Pixso.
+	</desc>
+	<defs>
+		<clipPath id="clip1904_109">
+			<rect id="plus" width="24.000000" height="24.000000" transform="translate(7.000000 7.000000)" fill="white" fill-opacity="0"/>
+		</clipPath>
+	</defs>
+	<rect id="Elements/Swatches/Single/Button" rx="12.000000" width="38.000000" height="38.000000" fill="#E7EFFF" fill-opacity="1.000000"/>
+	<rect id="plus" width="24.000000" height="24.000000" transform="translate(7.000000 7.000000)" fill="#FFFFFF" fill-opacity="0"/>
+	<g clip-path="url(#clip1904_109)">
+		<path id="Icon" d="M19 12L19 26M12 19L26 19" stroke="#0F62FE" stroke-opacity="1.000000" stroke-width="2.000000" stroke-linejoin="round"/>
+	</g>
+</svg>

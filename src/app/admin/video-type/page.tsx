@@ -6,7 +6,7 @@ import { LiaEdit } from "react-icons/lia";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { VscChromeClose } from "react-icons/vsc";
-import ContactForm from "@/components/faq/ContactForm";
+import VideoContactForm from "@/components/videocategory/ContactForm";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const style = {
@@ -19,8 +19,10 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-function FaqsPage() {
+function VideoCategoryPage() {
   const [users, setUsers] = useState([]);
+  console.log(users);
+  
   const [openDelete, setOpenDelete] = useState(false);
   const [faqId, setFaqId] = useState("");
   function handleOpenDelete(id: any) {
@@ -33,7 +35,7 @@ function FaqsPage() {
   const handleCloseAdd = () => setOpenAdd(false);
   useEffect(() => {
     axios
-      .get("https://lobster-app-225yp.ondigitalocean.app/api/faqs")
+      .get("https://lobster-app-225yp.ondigitalocean.app/api/video-type")
       .then((response) => {
         setUsers(response.data);
       })
@@ -44,7 +46,7 @@ function FaqsPage() {
 
   async function handleFaqDeleteById() {
     await axios.delete(
-      `https://lobster-app-225yp.ondigitalocean.app/api/faqs/${faqId}`
+      `https://lobster-app-225yp.ondigitalocean.app/api/video-type/${faqId}`
     );
     toast("Uğurla silindi");
 
@@ -104,14 +106,14 @@ function FaqsPage() {
               </button>
             </div>
             <div className="flex flex-col gap-3  justify-between">
-              <ContactForm />
+              <VideoContactForm />
             </div>
           </div>
         </Box>
       </Modal>
 
       <div className="flex flex-row justify-between items-center">
-        <h1 className="text-xl font-medium">FAQS</h1>
+        <h1 className="text-xl font-medium">Video Type</h1>
         <div>
           <button
             onClick={handleOpenAdd}
@@ -127,15 +129,13 @@ function FaqsPage() {
             <thead className="text-xs text-gray-700 uppercase bg-gray-50  dark:text-gray-400">
               <tr>
                 <th scope="col" className="px-6 py-3">
-                  Faq ID
+                  Video Type ID
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  FAQ Question
+                Video Type
                 </th>
 
-                <th scope="col" className="px-6 py-3">
-                  FAQ Answer
-                </th>
+               
                 <th scope="col" className="px-6 py-3">
                   Düzəliş Et
                 </th>
@@ -151,11 +151,9 @@ function FaqsPage() {
                     {item._id}
                   </td>
                   <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                    {item.question}
+                    {item.video_type}
                   </td>
-                  <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                    {item.answer}
-                  </td>
+                 
                   <td className="px-6 py-4  font-medium text-gray-900 whitespace-nowrap  text-center ">
                     <button
                       type="button"
@@ -183,4 +181,4 @@ function FaqsPage() {
   );
 }
 
-export default FaqsPage;
+export default VideoCategoryPage;

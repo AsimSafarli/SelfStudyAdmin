@@ -20,7 +20,7 @@ export default function RootLayout({
     <Navbar />
   </div>
   <div className="col-span-8 flex flex-col p-5">
-    <div className="bg-gray-100 flex-grow p-3 rounded-md overflow-auto">
+    <div className="bg-[#F9F9FC] flex-grow p-3 rounded-md overflow-auto">
       {children}
     </div>
   </div>

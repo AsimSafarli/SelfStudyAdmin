@@ -10,7 +10,7 @@ function handleShowProduct() {
   
 }
   return (
- <nav className='flex flex-col gap-2 bg-white border border-solid border-gray-300 h-full py-10 '>
+ <nav className='flex flex-col gap-2 bg-white  h-full py-10 '>
   <Link href={'/admin/dashboard'} className='hover:bg-main-color-50 hover:text-main-color-500  hover:border-transparent   text-black px-4 py-1  '>
           Dashboard
          </Link>
@@ -36,6 +36,8 @@ function handleShowProduct() {
         </div>
                 <Link href={'/admin/users'} className='hover:bg-main-color-50 hover:text-main-color-500  hover:border-transparent   text-black px-4 py-1   '>
           Users         </Link>
+          <Link href={'/admin/faqs'} className='hover:bg-main-color-50 hover:text-main-color-500  hover:border-transparent   text-black px-4 py-1   '>
+          FAQ         </Link>
   </nav>
 )
 }

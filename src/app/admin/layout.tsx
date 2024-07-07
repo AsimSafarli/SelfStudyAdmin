@@ -15,13 +15,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="grid grid-cols-10  h-full">
-      <div className="col-span-2 h-full">
-        <Navbar />
-      </div>
-      <div className="col-span-8 h-full py-10 px-5 overflow-auto">
-        {children}
-      </div>
-    </main>
+    <main className="grid grid-cols-10 h-screen">
+  <div className="col-span-2  w-full">
+    <Navbar />
+  </div>
+  <div className="col-span-8 flex flex-col p-5">
+    <div className="bg-gray-100 flex-grow p-3 rounded-md overflow-auto">
+      {children}
+    </div>
+  </div>
+</main>
+
   );
 }

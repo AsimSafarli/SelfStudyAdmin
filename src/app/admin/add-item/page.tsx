@@ -1,10 +1,16 @@
-"use client"
-import { Box, Modal } from '@mui/material';
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { FaArrowCircleUp } from 'react-icons/fa';
-import { SlArrowDown } from "react-icons/sl";
-import { VscChromeClose } from 'react-icons/vsc';
+"use client";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { FaRegTrashAlt } from "react-icons/fa";
+import { LiaEdit } from "react-icons/lia";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import { VscChromeClose } from "react-icons/vsc";
+import VideoContactForm from "@/components/videocategory/ContactForm";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import VideoForm from "@/components/video/VideoForm";
+import Link from "next/link";
 const style = {
   position: "absolute",
   top: "50%",
@@ -16,21 +22,22 @@ const style = {
   p: 4,
 };
 function AddVideo() {
-  const [videoPreview, setVideoPreview] = useState('');
-  const [users,setUsers] =  useState([])
-  const [selectedVideoType, setSelectedVideoType] = useState('');
-  const [typeId, setTypeId] = useState('');
+  const [users, setUsers] = useState([]);
+  console.log(users);
 
-  const handleSelect = (type:any , id:any) => {
-    setSelectedVideoType(type);
-    setTypeId(id)
-  };
+  const [openDelete, setOpenDelete] = useState(false);
+  const [faqId, setFaqId] = useState("");
+  function handleOpenDelete(id: any) {
+    setOpenDelete(true);
+    setFaqId(id);
+  }
+  const handleCloseDelete = () => setOpenDelete(false);
   const [openAdd, setOpenAdd] = useState(false);
   const handleOpenAdd = () => setOpenAdd(true);
   const handleCloseAdd = () => setOpenAdd(false);
   useEffect(() => {
     axios
-      .get("https://lobster-app-225yp.ondigitalocean.app/api/video-type")
+      .get("https://lobster-app-225yp.ondigitalocean.app/api/video")
       .then((response) => {
         setUsers(response.data);
       })
@@ -38,103 +45,124 @@ function AddVideo() {
         console.error("There was an error fetching the users!", error);
       });
   }, []);
-  const handleVideoUpload = (event:any) => {
-    const file = event.target.files[0];
-    if (file) {
-      const videoURL = URL.createObjectURL(file);
-      setVideoPreview(videoURL);
-    }
-  };
 
+  async function handleFaqDeleteById() {
+    await axios.delete(
+      `https://lobster-app-225yp.ondigitalocean.app/api/video/${faqId}`
+    );
+    toast("Uğurla silindi");
+
+    location.reload();
+  }
   return (
-    <div>
-        <Modal
-      open={openAdd}
-      onClose={handleCloseAdd}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
-      <Box sx={style}>
-        <div className="flex flex-col gap-3">
-          <div className="flex flex-row justify-between">
-            <h1 className="text-xl font-medium">Elave edin</h1>
-            <button
-              type="button"
-              onClick={handleCloseAdd}
-              className="p-1 flex items-center justify-center border border-gray-300 border-solid rounded-full"
-            >
-              <VscChromeClose />
-            </button>
-          </div>
-          <div className="flex flex-col gap-3 justify-between">
-            {users.map((item:any) => (
-              <div
-                key={item._id}
-                className={`p-2 border border-gray-300 rounded-md cursor-pointer ${
-                  selectedVideoType === item.video_type ? 'bg-blue-600 text-white' : ''
-                }`}
-                onClick={() => handleSelect(item.video_type , item._id)}
+    <div className="flex flex-col gap-3">
+      <ToastContainer />
+      {/* delete modal */}
+      <Modal
+        open={openDelete}
+        onClose={handleCloseDelete}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <div className="flex flex-col gap-3">
+            <h1 className="text-xl font-medium">
+              Silmək istədiyinizə əminsiniz?{" "}
+            </h1>
+            <div className="flex flex-col gap-3  justify-between">
+              <button
+                type="button"
+                onClick={handleCloseDelete}
+                className="hover:bg-blue-700 py-2 px-4 rounded-md text-white bg-blue-600 flex flex-row items-center justify-center gap-2"
               >
-                <input
-                  type="radio"
-                  id={item._id}
-                  name="videoType"
-                  value={item.video_type}
-                  checked={selectedVideoType === item.video_type}
-                  onChange={() => handleSelect(item.video_type , item._id)}
-                  className={`mr-2 ` }
-                />
-                <label htmlFor={item._id}                   className={` ${selectedVideoType === item.video_type ? "text-white" : "text-black"} ` }
-                >
-                  {item.video_type}
-                </label>
-              </div>
-            ))}
+                Xeyir
+              </button>
+              <button
+                type="button"
+                onClick={handleFaqDeleteById}
+                className="hover:bg-red-700 py-2 px-4 rounded-md text-white bg-red-600 flex flex-row items-center justify-center gap-2"
+              >
+                Bəli
+              </button>
+            </div>
           </div>
+        </Box>
+      </Modal>
+      
+
+      <div className="flex flex-row justify-between items-center">
+        <h1 className="text-xl font-medium">Video Type</h1>
+        <div>
+          <Link 
+          href={'/admin/add-item/video'}
+            className="px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            Elave Et
+          </Link>
         </div>
-      </Box>
-    </Modal>
-      <form className='flex flex-col gap-5'>
-        <div >
-          {
-             videoPreview ? (
-              <div className='flex flex-col gap-2'>
-                <label className='text-black font-medium text-xl'>Video Preview</label>
-                <video src={videoPreview} controls className='w-full h-60 border border-gray-300 rounded-md' />
-              </div> 
-            ) : (
-              <div className='flex flex-col gap-2'>
-                  <label htmlFor="videoUpload" className='text-black font-medium text-xl'>Upload Video</label>
-          <input
-            type='file'
-            accept="video/*"
-            onChange={handleVideoUpload}
-            className='h-20 border border-gray-300 bg-white w-full rounded-md'
-          />
-              </div>
-            )
-          }
-        
+      </div>
+      <div className="overflow-x-auto">
+        <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+          <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
+            <thead className="text-xs text-gray-700 uppercase bg-gray-50  dark:text-gray-400">
+              <tr>
+                <th scope="col" className="px-6 py-3">
+                  Video Type ID
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Video Type
+                </th>
+
+                <th scope="col" className="px-6 py-3">
+                  Düzəliş Et
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Sil
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {users?.map((item: any) => (
+                <tr key={item._id} className=" even:bg-gray-50 ">
+                  <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                    {item._id}
+                  </td>
+                  <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                    {item.video_title}
+                  </td>
+                  <td>
+                    <video src={item.video} className="h-10 w-10" />
+                  </td>
+                  <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                    {item.video_type.video_type}
+                  </td>
+                  <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                   <source  src={item.video_mp3}/>
+                  </td>
+
+                  <td className="px-6 py-4  font-medium text-gray-900 whitespace-nowrap  text-center ">
+                    <button
+                      type="button"
+                      className="hover:bg-green-700 py-2 px-4 rounded-md text-white bg-green-600 flex flex-row items-center justify-center gap-2"
+                    >
+                      Düzəliş Et <LiaEdit />
+                    </button>
+                  </td>
+                  <td className="px-6 py-4  font-medium text-gray-900 whitespace-nowrap  text-center ">
+                    <button
+                      onClick={() => handleOpenDelete(item._id)}
+                      type="button"
+                      className="hover:bg-red-700 py-2 px-4 rounded-md text-white bg-red-600 flex flex-row items-center justify-center gap-2"
+                    >
+                      Sil <FaRegTrashAlt />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-       
-        <div className='flex flex-col gap-2'>
-          <label htmlFor="videoTitle" className='text-black font-medium text-xl'>Video Title</label>
-          <input type='text' placeholder='video title' className='h-[52px] text-gray-700 px-4' />
-        </div>
-        <div className='flex flex-col gap-2'>
-          <label htmlFor="videoType" className='text-black font-medium text-xl'>Video Type</label>
-          {
-            selectedVideoType ? <button type='button' onClick={handleOpenAdd} className=' border flex-row justify-between border-gray-300 bg-white   w-full rounded-md h-[52px] text-blue-500 font-medium px-4 flex items-center'>
-            {selectedVideoType} 
-           </button> :  <button type='button' onClick={handleOpenAdd} className=' border flex-row justify-between border-gray-300 bg-white   w-full rounded-md h-[52px] text-gray-500 px-4 flex items-center'>
-           Select Video Type  
-           <SlArrowDown/>
-          </button>
-          }
-         
-         </div>
-        <button type='submit' className='px-4 py-3 rounded-md bg-blue-600 text-white font-medium'>Create Video</button>
-      </form>
+      </div>
     </div>
   );
 }
